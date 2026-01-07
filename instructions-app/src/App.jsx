@@ -18,8 +18,12 @@ const App = () => {
 		setActiveIndex(0);
 	};
 
-	let isFirstStep = true;
-	let isLastStep = false;
+	const onClickStepButton = (index) => {
+		setActiveIndex(index);
+	};
+
+	let isFirstStep = activeIndex === 0;
+	let isLastStep = activeIndex === steps.length - 1;
 
 	return (
 		<div className={styles.container}>
@@ -31,52 +35,27 @@ const App = () => {
 					</div>
 					<ul className={styles["steps-list"]}>
 						{steps.map((item, index) => (
-							<li className={styles["steps-item"] + " " + styles.done} key={item.id}>
-								<button className={styles["steps-item-button"]}>
+							<li
+								className={
+									styles["steps-item"] +
+									(index === activeIndex
+										? " " + styles.active
+										: "") +
+									(index < activeIndex
+										? " " + styles.done
+										: "")
+								}
+								key={item.id}
+							>
+								<button
+									className={styles["steps-item-button"]}
+									onClick={() => onClickStepButton(index)}
+								>
 									{index + 1}
 								</button>
-								Шаг {index + 1}
+								{item.title}
 							</li>
 						))}
-						{/* Выводите <li> с помощью массива steps и метода map(), подставляя в разметку нужные значения и классы */}
-						<li
-							className={styles["steps-item"] + " " + styles.done}
-						>
-							{/* Для того, чтобы вычислить необходимый класс используйте активный индекс, текущий индекс, а также тернарные операторы */}
-							<button className={styles["steps-item-button"]}>
-								1
-							</button>
-							{/* При клике на кнопку установка выбранного шага в качестве активного */}
-							Шаг 1
-						</li>
-						<li
-							className={styles["steps-item"] + " " + styles.done}
-						>
-							<button className={styles["steps-item-button"]}>
-								2
-							</button>
-							Шаг 2
-						</li>
-						<li
-							className={
-								styles["steps-item"] +
-								" " +
-								styles.done +
-								" " +
-								styles.active
-							}
-						>
-							<button className={styles["steps-item-button"]}>
-								3
-							</button>
-							Шаг 3
-						</li>
-						<li className={styles["steps-item"]}>
-							<button className={styles["steps-item-button"]}>
-								4
-							</button>
-							Шаг 4
-						</li>
 					</ul>
 					<div className={styles["buttons-container"]}>
 						<button
@@ -92,8 +71,6 @@ const App = () => {
 								onClick={onNextButtonClick}
 							>
 								Далее
-								{/* "Начать сначала", можно сделать этой же кнопкой, просто подменять обработчик и текст в зависимости от условия */}
-								{/* Или заменять всю кнопку в зависимости от условия */}
 							</button>
 						) : (
 							<button
